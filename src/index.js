@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import './App.css'
 // import App from './App';
-import List from './List.js';
+// import List from './List.js';
+import Map from './Map.js'
 // import Map from './oldmap.js';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -12,21 +13,21 @@ let allStations = [
     name: 'Maadi',
     place_id: 'maadimaadi',
     geometry: {
-      location: "29.960303, 31.257643"
+      location: {lat: 29.960303, lng: 31.257643}
     }
   },
   {
     name: 'Helwan',
     place_id: 'helwanhelwan',
     geometry: {
-      location: "29.848982, 31.334231"
+      location: {lat: 29.848982, lng: 31.334231}
     }
   },
   {
     name: 'Faisal',
     place_id: 'faisalfaisal',
     geometry: {
-      location: "30.017043, 31.203973"
+      location: {lat: 30.017043, lng: 31.203973}
     }
   }
 ];
@@ -36,26 +37,45 @@ let filteredStations = [
     name: 'Helwan',
     place_id: 'helwanhelwan',
     geometry: {
-      location: "29.848982, 31.334231"
+      location: {lat: 29.848982, lng: 31.334231}
     }
   }
 ];
 
 // allStations = null;
 
-// let filteredStations = [];
+// filteredStations = null;
 
 let activatedStation = {
-  id: '',
+  id: 'helwanhelwan',
   info: {
-    tips: null,
-    photos: null
+    tips: {
+      items: [
+        {
+          text: "If you're heading to Sadat in the morning, try going to the front of the train. There's often seating space!"
+        }
+      ]
+    },
+    photos: {
+      items: [
+        {
+          prefix: "https://igx.4sqi.net/img/general/",
+          suffix: "/9891113_um9DFfsa7ABQHmltfLOmMVQLs-47aw6YGFp8UpLcAyQ.jpg"
+        }
+      ]
+    }
   }
 };
 
-let searchTerm = '';
+// activatedStation.id = ''
+// activatedStation.info.tips = null;
+// activatedStation.info.photos = null;
+// activatedStation.info.tips.items = [];
+// activatedStation.info.photos.items = [];
 
+let searchTerm = '';
 let isLoadingStations = false;
+let isLoadingInfo = true;
 
 let filterStations = function(searchTe) {
   if (allStations) {
@@ -142,16 +162,26 @@ let activateStation = function(targetStationId) {
 
 
 
+// ReactDOM.render(
+  // <List
+  //   stations={filteredStations || allStations}
+  //   activatedStationId={activatedStation.id}
+  //   searchTerm={searchTerm}
+  //   isLoadingStations={isLoadingStations}
+  //   filterStations={filterStations}
+  //   activateStation={activateStation}
+  // />
+  // , document.getElementById('root'));
+// ReactDOM.render(<Map />, document.getElementById('root'));
+// ReactDOM.render(<App />, document.getElementById('root'));
+
 ReactDOM.render(
-  <List
+  <Map
     stations={filteredStations || allStations}
-    activatedStationId={activatedStation.id}
-    searchTerm={searchTerm}
+    activatedStation={activatedStation}
     isLoadingStations={isLoadingStations}
-    filterStations={filterStations}
+    isLoadingInfo={isLoadingInfo}
     activateStation={activateStation}
   />
   , document.getElementById('root'));
-// ReactDOM.render(<Map />, document.getElementById('root'));
-// ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
