@@ -1,0 +1,13 @@
+.highlight {
+  background-color: #9e9696;
+}
+
+.loading {
+  display: block;
+  margin: 50px auto auto auto;
+  width: 20px;
+}
+
+.center {
+  text-align: center;
+}
