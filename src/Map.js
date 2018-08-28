@@ -34,7 +34,7 @@ class Map extends Component {
     let map;
     map = new window.google.maps.Map(document.getElementById('map'), {
       center: {lat: 30.044305, lng: 31.235718},
-      zoom: 8,
+      zoom: 9,
     });
     let infoWindow = new window.google.maps.InfoWindow({
       disableAutoPan: true
