@@ -20,7 +20,7 @@ class App extends Component {
   }
   
   addStations = response => {
-    if (response === 'bad') {
+    if (response === 'UNKNOWN_ERROR') {
       this.setState({isOnline: false, isLoadingStations: false, isLoadingInfo: false});
     } else {
       this.setState({allStations: response, isLoadingStations: false, isOnline: true});

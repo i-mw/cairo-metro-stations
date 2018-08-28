@@ -24,11 +24,21 @@ export const foursquare = {
   //   clientSecret: 'YFNHQ4G3FNBDOYDZOP4NFLOJFDIRUMIFH3OGMYI33ZF3RGRA'
   // },
 
-  keys: {
-    clientId: 'F3QZA5P41P43VTBB5FU51VRTLX35OTAQ5UVBS4K2MU3NEPHW',
-    clientSecret: 'NK2530GRTGXS4CHVZM1ECQCOHOOXPOQSWQNEGDC13CXU1G2L'
-  },
+  // keys: {
+  //   clientId: 'F3QZA5P41P43VTBB5FU51VRTLX35OTAQ5UVBS4K2MU3NEPHW',
+  //   clientSecret: 'NK2530GRTGXS4CHVZM1ECQCOHOOXPOQSWQNEGDC13CXU1G2L'
+  // },
 
+  // keys: {
+  //   clientId: '4CMBOEV0AOUBYEKTJBDJGXUGZYKCN5HX1HCD0GQSNGNSWA3F',
+  //   clientSecret: '4ENM5TMBGSTNYCZS0EO4NTLH4O5LKAXT400ZNNVP1SLCHUP0'
+  // },
+
+  keys: {
+    clientId: 'PZC3JKPZDLJRYAK0RG5QQQF4SB52GGXQN0NJUBOJDLCXOHDJ',
+    clientSecret: 'BQW0HLVICM4NZG1W33SSNDJUH05NJYV45Y22PPRTTMGJCRT0'
+  },
+  
   getPlaceId(location) {
     return fetch('https://api.foursquare.com/v2/venues/search?' +
             'client_id=' + this.keys.clientId + '&' +
@@ -88,8 +98,7 @@ export const googleMaps = {
             cb(response);
           }
         } else {
-          response = 'bad';
-          cb(response);
+          cb(status);
         }
     });
   }
