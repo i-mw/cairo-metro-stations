@@ -116,23 +116,23 @@ class Map extends Component {
       + "</div>"
     );
 
-    if (infoWindow.id !== marker.id) {
-      infoWindow.id = marker.id;
+    if (infoWindow.marker !== marker) {
+      infoWindow.marker = marker;
       infoWindow.open(map, marker);
       infoWindow.addListener('closeclick', _ => {
         this.props.activateStation('');
-        infoWindow.id = '';
+        infoWindow.marker = null;
       });
       window.google.maps.event.addListener(map, "click", _ => {
         infoWindow.close();
         this.props.activateStation('');
-        infoWindow.id = '';
+        infoWindow.marker = null;
       });
       document.getElementById('map').addEventListener('keydown', event => {
         if(event.keyCode === 27) {
           infoWindow.close();
           this.props.activateStation('');
-          infoWindow.id = '';
+          infoWindow.marker = null;
         }
       })
     }
