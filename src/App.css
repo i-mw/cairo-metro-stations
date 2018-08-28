@@ -55,12 +55,25 @@ main .loading img {
   max-width: 250px;
 }
 
-.info-window img {
+/* .info-window img {
   margin-right: auto;
   margin-left: auto;
   display: block;
-}
+} */
 
 .info-window .loading {
   width: 20px;
+}
+
+.network-error {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-bottom: 0;
+  padding: 8px;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  background-color: #d45c51;
 }
