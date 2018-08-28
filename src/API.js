@@ -1,7 +1,32 @@
 export const foursquare = {
+  // keys: {
+  //   clientId: '05P0FS504FLZ5TKRIHPZBKZVUFCGIDXD55THE5H0K1YJDJGJ',
+  //   clientSecret: 'OZQE3XKXXVPNIRCCXMD0WTENRO314GO4S4BZCL4LS1HVM1JH'
+  // },
+
+  // keys: {
+  //   clientId: 'H3YM4S4DOJOSIKRGQIXRH15LJ3Y4YHHESRRZIDD2TXUMLA1F',
+  //   clientSecret: 'Q1GRWZKDTXRPP3NLHOP2M4RTL1ZTBA1NAT5EJ2OED2PEQYRE'
+  // },
+
+  // keys: {
+  //   clientId: 'SQ4DUW3REDAGG21W324DIDXBKAAHSWKJL0YZFUWAJBT3YAAK',
+  //   clientSecret: 'ZITLVK0JJMDX2OBGXQV33HML13UZS2GOVF3ZN4AXEBSWUKAS'
+  // },
+
+  // keys: {
+  //   clientId: 'JQV2OUETLB4YFDADMAXAQT1FLAEGDGTO3IAEPV1REZFDC1PH',
+  //   clientSecret: 'UQ3YCGJJZHYNERXXUNDNNS4JBGEST4M1QGSVUQSB5HD2ZVQ5'
+  // },
+
+  // keys: {
+  //   clientId: 'DHL4OUMEKM2N1IELF4I30I4Y2ZBUWD0LEV04DS5HLWVZAZHQ',
+  //   clientSecret: 'YFNHQ4G3FNBDOYDZOP4NFLOJFDIRUMIFH3OGMYI33ZF3RGRA'
+  // },
+
   keys: {
-    clientId: '05P0FS504FLZ5TKRIHPZBKZVUFCGIDXD55THE5H0K1YJDJGJ',
-    clientSecret: 'OZQE3XKXXVPNIRCCXMD0WTENRO314GO4S4BZCL4LS1HVM1JH'
+    clientId: 'F3QZA5P41P43VTBB5FU51VRTLX35OTAQ5UVBS4K2MU3NEPHW',
+    clientSecret: 'NK2530GRTGXS4CHVZM1ECQCOHOOXPOQSWQNEGDC13CXU1G2L'
   },
 
   getPlaceId(location) {
@@ -10,11 +35,11 @@ export const foursquare = {
             'client_secret=' + this.keys.clientSecret + '&' +
             'v=20180323&' +
             'll=' + location +
-            '&radius=500&' +
+            '&radius=420&' +
             'categoryId=4bf58dd8d48988d1fd931735&' +
             'limit=1')
               .then(response => response.json())
-              .then(data => data.response.venues[0].id)
+              .then(data => data)
   },
 
   getTips(placeId) {
@@ -25,7 +50,7 @@ export const foursquare = {
             'sort=popular&' +
             'limit=1')
               .then(response => response.json())
-              .then(data => data.response.tips)
+              .then(data => data)
   },
 
   getPhotos(placeId) {
@@ -35,7 +60,7 @@ export const foursquare = {
             'v=20180323&' +
             'limit=1')  
               .then(response => response.json())
-              .then( data => data.response.photos)
+              .then(data => data)
   }
 }
 
