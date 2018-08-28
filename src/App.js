@@ -28,13 +28,15 @@ class App extends Component {
   }
 
   filterStations = searchTerm => {
-    if (this.state.allStations) {
-      let filteredStations = this.state.allStations.filter(station => {
-        return station.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-      });
-      this.setState({searchTerm, filteredStations});
-    } else {
-      this.setState({searchTerm, filteredStations: null});
+    if (this.state.searchTerm !== searchTerm) {
+      if (this.state.allStations) {
+        let filteredStations = this.state.allStations.filter(station => {
+          return station.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+        });
+        this.setState({searchTerm, filteredStations});
+      } else {
+        this.setState({searchTerm, filteredStations: null});
+      }
     }
   }
 
