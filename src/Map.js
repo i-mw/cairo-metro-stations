@@ -55,7 +55,8 @@ class Map extends Component {
       let marker = new google.maps.Marker({
         position: station.geometry.location,
         title: station.name,
-        id: station.place_id
+        id: station.place_id,
+        icon: 'https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,db4437,ffffff&color=ff000000?scale=1'
       });
       return marker;
     });
@@ -82,7 +83,7 @@ class Map extends Component {
 
   populateInfoWindow(infoWindow, map, marker, info) {
     const {isLoadingInfo} = this.props;
-    
+
     infoWindow.setContent(
       "<div class='info-window'>" +
         "<h3>" + marker.title + "</h3>" +
@@ -119,20 +120,33 @@ class Map extends Component {
     );
 
     if (infoWindow.marker !== marker) {
+      if(infoWindow.marker) {
+        infoWindow.marker.setIcon('https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,db4437,ffffff&color=ff000000?scale=1');
+      }
       infoWindow.marker = marker;
       infoWindow.open(map, marker);
+      infoWindow.marker.setIcon('https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,000000,ffffff&color=ff000000?scale=1');
       map.panTo(infoWindow.marker.getPosition());
       infoWindow.addListener('closeclick', _ => {
+        if(infoWindow.marker) {
+          infoWindow.marker.setIcon('https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,db4437,ffffff&color=ff000000?scale=1');
+        }
         this.props.activateStation('');
         infoWindow.marker = null;
       });
       window.google.maps.event.addListener(map, "click", _ => {
+        if(infoWindow.marker) {
+          infoWindow.marker.setIcon('https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,db4437,ffffff&color=ff000000?scale=1');
+        }
         infoWindow.close();
         this.props.activateStation('');
         infoWindow.marker = null;
       });
       document.getElementById('map').addEventListener('keydown', event => {
         if(event.keyCode === 27) {
+          if(infoWindow.marker) {
+            infoWindow.marker.setIcon('https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,db4437,ffffff&color=ff000000?scale=1');
+          }
           infoWindow.close();
           this.props.activateStation('');
           infoWindow.marker = null;
