@@ -40,6 +40,21 @@ class Map extends Component {
       disableAutoPan: true
     });
 
+    infoWindow.addListener('closeclick', _ => closeInfoWindow());
+    window.google.maps.event.addListener(map, "click", _ => closeInfoWindow());
+    document.getElementById('map').addEventListener('keydown', event => {
+      if(event.keyCode === 27) {closeInfoWindow()}
+    });
+
+    let closeInfoWindow = _ => {
+      if(infoWindow.marker) {
+        infoWindow.marker.setIcon(this.getIcon('default'));
+      }
+      infoWindow.close();
+      this.props.activateStation('');
+      infoWindow.marker = null;
+    }
+
     setIsLoadingStations(true);
     API.googleMaps.getStations(map, addStations);
     this.setState({map, infoWindow});
@@ -134,31 +149,6 @@ class Map extends Component {
       infoWindow.open(map, marker);
       infoWindow.marker.setIcon(this.getIcon('activated'));
       map.panTo(infoWindow.marker.getPosition());
-      infoWindow.addListener('closeclick', _ => {
-        if(infoWindow.marker) {
-          infoWindow.marker.setIcon(this.getIcon('default'));
-        }
-        this.props.activateStation('');
-        infoWindow.marker = null;
-      });
-      window.google.maps.event.addListener(map, "click", _ => {
-        if(infoWindow.marker) {
-          infoWindow.marker.setIcon(this.getIcon('default'));
-        }
-        infoWindow.close();
-        this.props.activateStation('');
-        infoWindow.marker = null;
-      });
-      document.getElementById('map').addEventListener('keydown', event => {
-        if(event.keyCode === 27) {
-          if(infoWindow.marker) {
-            infoWindow.marker.setIcon(this.getIcon('default'));
-          }
-          infoWindow.close();
-          this.props.activateStation('');
-          infoWindow.marker = null;
-        }
-      })
     }
   }
 
