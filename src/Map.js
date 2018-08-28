@@ -77,31 +77,38 @@ class Map extends Component {
 
     let markers, bounds;
 
-    markers = stations.map(station => {
-      let marker = new google.maps.Marker({
-        position: station.geometry.location,
-        title: station.name,
-        id: station.place_id,
-        icon: this.getIcon('default')
+    if (stations.length === 0){
+      markers = [];
+      map.setCenter({lat: 30.044305, lng: 31.235718});
+      map.setZoom(9);
+    }
+    else {
+      markers = stations.map(station => {
+        let marker = new google.maps.Marker({
+          position: station.geometry.location,
+          title: station.name,
+          id: station.place_id,
+          icon: this.getIcon('default')
+        });
+        return marker;
       });
-      return marker;
-    });
-    
-    bounds = new google.maps.LatLngBounds();
+      
+      bounds = new google.maps.LatLngBounds();
 
-    markers.forEach(marker => {
-      bounds.extend(marker.position);
-      marker.addListener('click', function() {
-        activateStation(this.id);
+      markers.forEach(marker => {
+        bounds.extend(marker.position);
+        marker.addListener('click', function() {
+          activateStation(this.id);
+        });
+        marker.setMap(map);
       });
-      marker.setMap(map);
-    });
 
-    map.setOptions({ maxZoom: 13 });
-    map.fitBounds(bounds);
-    google.maps.event.addListener(map, 'bounds_changed', function() {
-      map.setOptions({ maxZoom: undefined });
-    });
+      map.setOptions({ maxZoom: 13 });
+      map.fitBounds(bounds);
+      google.maps.event.addListener(map, 'bounds_changed', function() {
+        map.setOptions({ maxZoom: undefined });
+      });
+    }
 
     this.setState({markers});
   }
@@ -165,7 +172,7 @@ class Map extends Component {
 
 
   componentDidUpdate() {
-    if (this.state.map && !this.props.isLoadingStations && this.props.stations && this.props.stations.length !== 0) {
+    if (this.state.map && !this.props.isLoadingStations && this.props.stations) {
       if (this.props.stations !== this.state.stations) {
         this.drawMarkers();
         this.setState({stations: this.props.stations});
@@ -189,9 +196,7 @@ class Map extends Component {
           this.populateInfoWindow(infoWindow, map, marker, activatedStationInfo);
         }
       }
-    } else if (!isLoadingStations && stations && stations.length === 0) {
-      // TODO: handle empty stations search after previous stations were rendered
-    }
+    } 
 
     return(
       <main>
