@@ -64,8 +64,19 @@ class Map extends Component {
     const google = window.google;
     const {stations, activateStation} = this.props;
     const {map} = this.state; 
+
+    if(this.state.markers[0]) {
+      removeOldMarkers(this.state.markers);
+    }
+
+    function removeOldMarkers(markers) {
+      markers.forEach(marker => {
+        marker.setMap(null)
+      })
+    }
+
     let markers, bounds;
-    
+
     markers = stations.map(station => {
       let marker = new google.maps.Marker({
         position: station.geometry.location,
@@ -75,7 +86,7 @@ class Map extends Component {
       });
       return marker;
     });
-
+    
     bounds = new google.maps.LatLngBounds();
 
     markers.forEach(marker => {
@@ -174,7 +185,9 @@ class Map extends Component {
     if (this.state.markers.length !==0 ) {
       if (activatedStationId) {
         let marker = markers.find(marker => marker.id === activatedStationId);
-        this.populateInfoWindow(infoWindow, map, marker, activatedStationInfo);
+        if(marker) {
+          this.populateInfoWindow(infoWindow, map, marker, activatedStationInfo);
+        }
       }
     } else if (!isLoadingStations && stations && stations.length === 0) {
       // TODO: handle empty stations search after previous stations were rendered
