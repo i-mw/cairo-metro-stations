@@ -36,7 +36,9 @@ class Map extends Component {
       center: {lat: 30.044305, lng: 31.235718},
       zoom: 8,
     });
-    let infoWindow = new window.google.maps.InfoWindow();
+    let infoWindow = new window.google.maps.InfoWindow({
+      disableAutoPan: true
+    });
 
     setIsLoadingStations(true);
     API.googleMaps.getStations(map, addStations);
@@ -119,6 +121,7 @@ class Map extends Component {
     if (infoWindow.marker !== marker) {
       infoWindow.marker = marker;
       infoWindow.open(map, marker);
+      map.panTo(infoWindow.marker.getPosition());
       infoWindow.addListener('closeclick', _ => {
         this.props.activateStation('');
         infoWindow.marker = null;
