@@ -1,10 +1,13 @@
 import React, {Component} from 'react'
 import propTypes from 'prop-types'
+import * as API from './API.js'
 
 class Map extends Component {
   state = {
+    stations: [],
     markers: [],
-    activatedMarker: {}
+    map: null,
+    infoWindow: null,
   }
 
   componentDidMount() {
@@ -15,117 +18,153 @@ class Map extends Component {
       script.addEventListener('load', e => {
         this.initMap();
       });
+      
+      window.setTimeout( _ => {
+        if (!window.google) {
+          this.props.setIsLoadingStations(false);
+          this.props.setIsOnline(false);
+        }
+      }, 1000);
     }
   }
 
   initMap() {
-    const {
-      stations,
-      activatedStation,
-      isLoadingStations,
-      isLoadingInfo,
-      activateStation
-      } = this.props;
-    const google = window.google;
-    let map, markers, infoWindow, bounds;
+    const {addStations, setIsLoadingStations} = this.props;
 
-    map = new google.maps.Map(document.getElementById('map'), {
+    let map;
+    map = new window.google.maps.Map(document.getElementById('map'), {
       center: {lat: 30.044305, lng: 31.235718},
-      zoom: 10,
+      zoom: 8,
+    });
+    let infoWindow = new window.google.maps.InfoWindow();
+
+    setIsLoadingStations(true);
+    API.googleMaps.getStations(map, addStations);
+    this.setState({map, infoWindow});
+  }
+ 
+  drawMarkers() {
+    const google = window.google;
+    const {stations, activateStation} = this.props;
+    const {map} = this.state; 
+    let markers, bounds;
+    
+    markers = stations.map(station => {
+      let marker = new google.maps.Marker({
+        position: station.geometry.location,
+        title: station.name,
+        id: station.place_id
+      });
+      return marker;
     });
 
-    if (!isLoadingStations && stations && stations.length !== 0) {
-      markers = stations.map(station => {
-        let marker = new google.maps.Marker({
-          position: station.geometry.location,
-          title: station.name,
-          id: station.place_id
-        });
-        return marker;
+    bounds = new google.maps.LatLngBounds();
+
+    markers.forEach(marker => {
+      bounds.extend(marker.position);
+      marker.addListener('click', function() {
+        activateStation(this.id);
       });
+      marker.setMap(map);
+    });
 
-      infoWindow = new google.maps.InfoWindow();
-      bounds = new google.maps.LatLngBounds();
+    map.setOptions({ maxZoom: 13 });
+    map.fitBounds(bounds);
+    google.maps.event.addListener(map, 'bounds_changed', function() {
+      map.setOptions({ maxZoom: undefined });
+    });
 
-      markers.forEach(marker => {
-        bounds.extend(marker.position);
-        marker.addListener('click', function() {
-          activateStation(this.id);
-        });
-        marker.setMap(map);
+    this.setState({markers});
+  }
+
+
+  populateInfoWindow(infoWindow, map, marker, info) {
+    const {isLoadingInfo} = this.props;
+    
+    infoWindow.setContent(
+      "<div class='info-window'>" +
+        "<h3>" + marker.title + "</h3>" +
+        (isLoadingInfo ?
+          '<div style="background: url(loading.gif); background-size: 20px 20px; width: 20px; height: 20px;margin-right: auto; margin-left: auto;" ></div>'
+        :
+          (info === 'no-quota' ?
+            "<p class='center'>Server overloaded. Try later!</p>"
+          :
+            (!info.tips && !info.photos ?
+              "<p class='center'>Couldn't retrieve data!</p>"
+            :
+              (!info.photos.items[0] && !info.tips.items[0] ?
+                "<p class='center'>No data available about this station!</p>"
+              :
+                (info.photos.items[0] ?
+                  '<div style="background: url(' + info.photos.items[0].prefix + "250x150" + info.photos.items[0].suffix + '); width: 250px; height: 150px;" ></div>'
+                  :
+                  ''
+                )
+                +
+                (info.tips.items[0] ?
+                  "<p><strong> Tip: </strong></p>" +
+                  "<p>" + info.tips.items[0].text + "</p>"
+                  :
+                  ''
+                )
+              ) 
+            )
+          )
+        )
+
+      + "</div>"
+    );
+
+    if (infoWindow.id !== marker.id) {
+      infoWindow.id = marker.id;
+      infoWindow.open(map, marker);
+      infoWindow.addListener('closeclick', _ => {
+        this.props.activateStation('');
+        infoWindow.id = '';
       });
-
-      map.setOptions({ maxZoom: 13 });
-      map.fitBounds(bounds);
-
-      google.maps.event.addListener(map, 'bounds_changed', function() {
-        map.setOptions({ maxZoom: undefined });
+      window.google.maps.event.addListener(map, "click", _ => {
+        infoWindow.close();
+        this.props.activateStation('');
+        infoWindow.id = '';
       });
+      document.getElementById('map').addEventListener('keydown', event => {
+        if(event.keyCode === 27) {
+          infoWindow.close();
+          this.props.activateStation('');
+          infoWindow.id = '';
+        }
+      })
+    }
+  }
 
 
-      if (activatedStation.id) {
-        let activatedMarker = markers.find(marker => {
-          return marker.id === activatedStation.id;
-        });
-        populateInfoWindow(activatedMarker, infoWindow, activatedStation.info);
+  componentDidUpdate() {
+    if (this.state.map && !this.props.isLoadingStations && this.props.stations && this.props.stations.length !== 0) {
+      if (this.props.stations !== this.state.stations) {
+        this.drawMarkers();
+        this.setState({stations: this.props.stations});
       }
-
-      function populateInfoWindow(marker, infoWindow, info) {
-        if (!isLoadingInfo && !info.tips && !info.photos) {
-          infoWindow.setContent(
-            "<div class='info-window'>" + 
-              "<p class='center'>Couldn't retrieve data!</p>" +
-            "</div>"
-          );
-        }
-        else if (!isLoadingInfo && !info.photos.items[0] && !info.tips.items[0]) {
-          infoWindow.setContent(
-            "<div class='info-window'>" +
-              "<p class='center'>No data available about this station!</p>" +
-            "</div>"
-          );
-        }
-        else if (!isLoadingInfo && info.photos.items[0] && info.tips.items[0]) {
-          infoWindow.setContent(
-            "<div class='info-window'>" + 
-              "<img src=" + info.photos.items[0].prefix + "250x150" + info.photos.items[0].suffix + "/>" +
-              "<p><strong> Tip: </strong></p>" +
-              "<p>" + info.tips.items[0].text + "</p>" +
-            "</div>"
-          );
-        }
-        else if (!isLoadingInfo && info.photos.items[0] && !info.tips.items[0]) {
-          infoWindow.setContent(
-            "<div class='info-window'>" + 
-              "<img src=" + info.photos.items[0].prefix + "250x150" + info.photos.items[0].suffix + "/>" +
-            "</div>"
-          );
-        }
-        else if (!isLoadingInfo && !info.photos.items[0] && info.tips.items[0]) {
-          infoWindow.setContent(
-            "<div class='info-window'>" + 
-              "<p><strong> Tip: </strong></p>" +
-              "<p>" + info.tips.items[0].text + "</p>" +
-            "</div>"
-          );
-        }
-        else if (isLoadingInfo) {
-          infoWindow.setContent(
-            "<div class='info-window'>" + 
-              "<img src='loading.gif' alt='loading' class='loading'/>" +
-            "</div>"
-          );
-        }
-
-        infoWindow.open(map, marker);
-      }
-    } else if (!isLoadingStations && stations && stations.length === 0) {
-      // TODO: handle empty stations search after previous stations were rendered
     }
   }
 
   render() {
-    const {stations, isLoadingStations} = this.props;
+    const {
+      stations,
+      activatedStationId,
+      activatedStationInfo,
+      isLoadingStations,
+    } = this.props;
+    const {map, infoWindow, markers} = this.state; 
+
+    if (this.state.markers.length !==0 ) {
+      if (activatedStationId) {
+        let marker = markers.find(marker => marker.id === activatedStationId);
+        this.populateInfoWindow(infoWindow, map, marker, activatedStationInfo);
+      }
+    } else if (!isLoadingStations && stations && stations.length === 0) {
+      // TODO: handle empty stations search after previous stations were rendered
+    }
 
     return(
       <main>
@@ -153,10 +192,17 @@ class Map extends Component {
 
 Map.propTypes = {
   stations: propTypes.array,
-  activatedStation: propTypes.object.isRequired,
+  activatedStationId: propTypes.string.isRequired,
+  activatedStationInfo: propTypes.oneOfType([
+    propTypes.object,
+    propTypes.string
+  ]),
   isLoadingStations: propTypes.bool.isRequired,
   isLoadingInfo: propTypes.bool.isRequired,
-  activateStation: propTypes.func.isRequired
+  activateStation: propTypes.func.isRequired,
+  addStations: propTypes.func.isRequired,
+  setIsLoadingStations: propTypes.func.isRequired,
+  setIsOnline: propTypes.func.isRequired
 }
 
 export default Map
