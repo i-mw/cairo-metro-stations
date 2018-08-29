@@ -13,6 +13,16 @@ class List extends Component {
     this.props.activateStation(event.target.getAttribute('id'));
   }
 
+  componentDidUpdate() {
+    let highlighted = document.querySelector('.highlight');
+    if (highlighted) {
+      let aboveElement = highlighted.getBoundingClientRect().top;
+      if (aboveElement < 40 || aboveElement + 30 > window.innerHeight) {
+        highlighted.scrollIntoView(true);
+      }
+    }
+  }
+
   render() {
     const {stations, activatedStationId, searchTerm, isLoadingStations} = this.props;
     return (
@@ -22,7 +32,7 @@ class List extends Component {
             defaultValue={searchTerm} onKeyDown={event => {event.keyCode === 13 && this.handleFilterSubmit(event)}}/>
           <input id="filter-button" type="button" value="Filter" onClick={this.handleFilterSubmit}/>
         </form>
-        {
+        { 
           isLoadingStations ? 
             <img src="loading.gif" alt="loading" className="loading"/>
             :
@@ -33,7 +43,7 @@ class List extends Component {
                 <p className="center">No matching stations!</p>
                 :
                 <ul id="stations-list">
-                  {
+                  { 
                     stations.map(station => {
                       return <li key={station.place_id} id={station.place_id} className={(station.place_id === activatedStationId) ? "highlight" : undefined} onClick={this.handleStationClick}>{station.name}</li>
                     })
