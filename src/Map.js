@@ -166,6 +166,9 @@ class Map extends Component {
                   :
                   ''
                 )
+                +
+                "<p class='attribute'>Data obtained from <a href='https://foursquare.com'>" +
+                "Foursquare</a></p>"
               ) 
             )
           )
