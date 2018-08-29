@@ -54,9 +54,8 @@ N.B. You can't test service worker on development server, to do so you need to c
 
 ## Produce Static Version
 
-Before executing production command, you need to change the value of `homepage` in `package.json` file to the intended url of the project. Its set by default to `"https://i-mw.github.io/cairo-metro-stations"`. If you intend to run it locally, just leave it.
 
-Then, you can produce a static version by running:
+You can produce a static version by running:
 ```bash
 npm run build
 ```
@@ -82,7 +81,6 @@ To view or deploy the produced static version, you have 3 options:
 * ### Deploy to github pages
     To publish on a standalone repository for the static version, do the following:
     * create github repository
-    * change `homepage` value in `package.json` to github pages url of your repository
     * build the static version as mentioned above
     * isolate build folder out of the project repository and create independent local repository for it
     * push your new repository to github repository `git push origin master`
@@ -98,7 +96,6 @@ To view or deploy the produced static version, you have 3 options:
 
 * ### Deploy to custom server
     To do so, you need to:
-    * change `homepage` value in `package.json` to intended project url
     * build the static version as mentioned above
     * upload `build` folder to your server
     * handle 404 and routeing
