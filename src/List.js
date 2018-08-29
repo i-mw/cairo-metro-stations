@@ -13,20 +13,6 @@ class List extends Component {
     this.props.activateStation(event.target.getAttribute('id'));
   }
 
-  componentDidUpdate() {
-    let highlighted = document.querySelector('.highlight');
-    if (highlighted) {
-      let aboveElement = highlighted.getBoundingClientRect().top;
-      if (aboveElement < 40 || aboveElement + 30 > window.innerHeight) {
-        highlighted.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest"
-        });
-      }
-    }
-  }
-
   render() {
     const {stations, activatedStationId, searchTerm, isLoadingStations} = this.props;
     return (
@@ -77,6 +63,20 @@ class List extends Component {
         }
       </aside>
     )
+  }
+
+  componentDidUpdate() {
+    let highlighted = document.querySelector('.highlight');
+    if (highlighted) {
+      let aboveElement = highlighted.getBoundingClientRect().top;
+      if (aboveElement < 40 || aboveElement + 30 > window.innerHeight) {
+        highlighted.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest"
+        });
+      }
+    }
   }
 }
 
