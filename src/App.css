@@ -1,30 +1,107 @@
-.highlight {
-  background-color: #9e9696;
+html,
+body,
+#root,
+.container {
+  width: 100%;
+  height: 100%;
 }
 
-aside .loading, {
-  display: block;
-  margin: 50px auto auto auto;
-  width: 20px;
+body,
+* {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-flow: row nowrap;
+  font-family: sans-serif;
 }
 
 .center {
   text-align: center;
 }
 
-main header h1 img#hamburger-icon {
-  width: 22px;
+.network-error {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-bottom: 0;
+  padding: 8px;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  background-color: #d45c51;
+}
+
+
+/* 
+ * Main
+ */
+
+ main {
+  height: 100%;
+  width: auto;
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+/* header */
+
+main header {
+  color: white;
+  background-color: black;
+  padding: 0 10px;
+}
+
+main header::after {
+  content: '0';
+  display: block;
+  clear: both;
+  visibility: hidden;
+  height: 0;
+}
+
+main header h1 {
   float: left;
-  cursor: hand;
+  font-size: 1.7em;
+  vertical-align: baseline;
+  position: relative;
+}
+
+main header h1 img#hamburger-icon {
+  width: 48px;
+  padding: 13px;
+  float: left;
+  cursor: pointer;
+  vertical-align: baseline;
   margin-top: 5px;
-  border: 1px dashed red;
 }
 
-#map {
-  height: 500px;
+main header h1 span {
+  margin-left: 20px;
+  vertical-align: baseline;
+  position: absolute;
+  top: calc(50% - 16px);
+}
+
+#app-title {
+  cursor: pointer;
+}
+
+/* map */
+
+main #map {
   width: 100%;
+  height: calc(100% - 53px);
 }
 
+/* map overlays */
 
 main .notify {
   position: absolute;
@@ -46,34 +123,132 @@ main .loading {
 }
 
 main .loading img {
-  width: 40px;
+  width: 35px;
   vertical-align: middle;
 }
 
+/* info windows */
 
 .info-window {
   max-width: 250px;
+  white-space: normal;
+  margin: auto;
 }
 
-/* .info-window img {
-  margin-right: auto;
-  margin-left: auto;
-  display: block;
-} */
+.info-window h3 {
+  margin: 5px auto 15px auto;
+}
+
+.info-window div {
+  margin-bottom: 5px;
+}
+
+.info-window p:first-of-type {
+  margin: 10px auto;
+}
+
+.info-window p:last-of-type {
+  margin-bottom: 5px;
+}
 
 .info-window .loading {
   width: 20px;
 }
 
-.network-error {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin-bottom: 0;
-  padding: 8px;
-  z-index: 2;
-  text-align: center;
+
+/* 
+ * Side menu 
+ */
+
+aside {
   color: white;
-  background-color: #d45c51;
+  background-color: #413e3e;
+  width: 600%;
+  max-width: 300px;
+  height: 100%;
+  margin-left: -300px;
+  transition: margin-left 0.5s ease-in-out;
+}
+
+aside.open {
+  margin-left: 0;
+}
+
+/* form */
+
+aside form {
+  width: 100%;
+}
+
+aside form #filter-input {
+  width: 65%;
+  height: 40px;
+  display: block;
+  float: left;
+  padding-left: 7px;
+  padding-right: 7px;
+  font-size: 14px;
+}
+
+aside form #filter-button {
+  width: 35%;
+  height: 40px;
+  display: block;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+aside form #filter-button:active {
+  background-color: #9e9696;
+  color: white;
+}
+
+/* list */
+
+aside .loading {
+  display: block;
+  margin: 50px auto auto auto;
+  max-width: 45px;
+}
+
+aside ul#stations-list {
+  height: calc(100% - 40px);
+  overflow-y: scroll;
+  /* border: 1px dashed red; */
+  list-style-type: none;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                        supported by Chrome and Opera */
+}
+
+aside ul#stations-list li {
+  padding: 15px;
+  border-bottom: 1px solid #695d5d;
+  cursor: pointer;
+}
+
+aside ul#stations-list li:active {
+  background-color: #9e9696;
+}
+
+aside .highlight {
+  background-color: #9e9696;
+}
+
+
+/*
+ * Width more than 600px
+ */
+
+@media screen and (min-width: 750px) {
+  aside {
+    margin-left: 0;
+  }
+  aside.close {
+    margin-left: -300px;
+  }
 }
