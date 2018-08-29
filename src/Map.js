@@ -106,7 +106,7 @@ class Map extends Component {
     const {isLoadingInfo} = this.props;
 
     infoWindow.setContent(
-      "<div class='info-window'>" +
+      "<div role='dialog' aria-label='info window' class='info-window'>" +
         "<h3>" + marker.title + "</h3>" +
         (isLoadingInfo ?
           '<div role="img" aria-label="loading" ' +
@@ -224,15 +224,15 @@ class Map extends Component {
 
     return(
       <main id="main" tabIndex="-1">
-        <header>
-          <h1>
+        <header role="banner">
+          <h1 aria-labelledby="app-title">
             <img id="hamburger-icon" src="menu.svg"
-              alt="hamburger icon" tabIndex="0"
+              alt="hamburger icon" aria-label="toggle side menu" tabIndex="0"
               onClick={this.handlehamburgerClick}
               onKeyDown={event => { (event.keyCode === 13) && this.handlehamburgerClick(event) }}
             />
             <span
-              id="app-title" tabIndex="0"
+              id="app-title" tabIndex="0" aria-hidden="true"
               onClick={_ => {this.handleAppTitleClick(this.props)}}
               onKeyDown={event => { (event.keyCode === 13) && this.handleAppTitleClick(this.props) }}              
             >Cairo Metro Stations
@@ -241,9 +241,9 @@ class Map extends Component {
         </header>
         {
           isLoadingStations ?
-            <p className="notify loading">
-              <span>Loading Stations</span>
-              <img src="loading2.gif" alt="loading"/>
+            <p className="notify loading" aria-label="loading stations">
+              <span aria-hidden="true">Loading Stations</span>
+              <img src="loading2.gif" alt="loading" aria-hidden="true"/>
             </p>
             :
             (!stations) &&
@@ -251,7 +251,7 @@ class Map extends Component {
         }
 
         <div
-          id="map"
+          id="map" role="application"
           onKeyDown={event => { (event.keyCode === 27) && this.closeInfoWindow(this.state.infoWindow) }}
         >
         </div>

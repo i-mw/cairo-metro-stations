@@ -147,8 +147,9 @@ class App extends Component {
     } = this.state;
 
     return (
-      <div className="container">
+      <div className="container" role="region" aria-label="app container">
         <div tabIndex="0" className="skip-link"
+          role="link" aria-label="skip to main content"
           onClick={this.handleSkipLink}
           onKeyDown={event => { (event.keyCode === 13) && this.handleSkipLink(event) }}          
           >Skip to main content</div>

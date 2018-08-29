@@ -19,15 +19,15 @@ class List extends Component {
       <aside>
         <form>
           <input
-            id="filter-input"type="text"
-            placeholder={isLoadingStations? "loading..." : "Search for a place"}
+            id="filter-input" type="text" aria-label="search stations"
+            placeholder={isLoadingStations? "loading..." : "Search for a station"}
             autoComplete="off"
             value={searchTerm}
             onChange={this.handleFilterSubmit}
             onKeyDown={event => { (event.keyCode === 13) && this.handleFilterSubmit(event) }}
           />
           <input
-            id="filter-button" type="button" value="Filter"
+            id="filter-button" type="button" value="Filter" aria-label="filter stations"
             onClick={this.handleFilterSubmit}
             onKeyDown={event => { (event.keyCode === 13) && this.handleFilterSubmit(event) }}
           />
@@ -42,7 +42,7 @@ class List extends Component {
               stations.length === 0 ?
                 <p className="center">No matching stations!</p>
                 :
-                <ul id="stations-list">
+                <ul id="stations-list" aria-label="matched stations">
                   { 
                     stations.map(station => {
                       return (
