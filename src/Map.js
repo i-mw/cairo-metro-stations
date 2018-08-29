@@ -292,8 +292,10 @@ class Map extends Component {
     // Reset side menu to its default appearence on resizing window
     // to prevent quirky behavior
     window.addEventListener('resize', function(){
-      document.querySelector('aside').classList.remove('open');
-      document.querySelector('aside').classList.remove('close');
+      if (document.querySelector('aside')) {
+        document.querySelector('aside').classList.remove('open');
+        document.querySelector('aside').classList.remove('close');
+      }
     });
   }
 
