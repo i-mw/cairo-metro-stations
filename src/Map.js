@@ -26,6 +26,17 @@ class Map extends Component {
         }
       }, 1000);
     }
+
+    let hamburger = document.getElementById('hamburger-icon');
+    hamburger.addEventListener('click', function() {
+      document.querySelector('aside').classList.toggle('open');
+      document.querySelector('aside').classList.toggle('close');
+    });
+
+    window.addEventListener('resize', function(){
+      document.querySelector('aside').classList.remove('open');
+      document.querySelector('aside').classList.remove('close');
+    });
   }
 
   initMap() {
