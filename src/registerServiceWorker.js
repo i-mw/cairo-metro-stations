@@ -101,6 +101,9 @@ function checkValidServiceWorker(swUrl) {
       }
     })
     .catch(() => {
+      document.querySelector('.container').insertAdjacentHTML("beforeend", 
+        '<p class="network-error">Network error! Check your connection.</p>'
+      );
       console.log(
         'No internet connection found. App is running in offline mode.'
       );
