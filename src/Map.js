@@ -109,7 +109,11 @@ class Map extends Component {
       "<div class='info-window'>" +
         "<h3>" + marker.title + "</h3>" +
         (isLoadingInfo ?
-          '<div style="background: url(loading.gif); background-size: 20px 20px; width: 20px; height: 20px;margin-right: auto; margin-left: auto;" ></div>'
+          '<div role="img" aria-label="loading" ' +
+          'style="background: url(loading.gif); ' +
+          'background-size: 20px 20px; ' +
+          'width: 20px; height: 20px;margin-right: auto; ' +
+          'margin-left: auto;" ></div>'
         :
           (info === 'no-quota' ?
             "<p class='center'>Server overloaded. Try later!</p>"
@@ -121,7 +125,10 @@ class Map extends Component {
                 "<p class='center'>No data available about this station!</p>"
               :
                 (info.photos.items[0] ?
-                  '<div style="background: url(' + info.photos.items[0].prefix + "250x150" + info.photos.items[0].suffix + '); width: 250px; height: 150px;" ></div>'
+                  '<div  role="img" aria-label="'+ marker.title +
+                  '" style="background: url(' + info.photos.items[0].prefix +
+                  "250x150" + info.photos.items[0].suffix +
+                  '); width: 250px; height: 150px;" ></div>'
                   :
                   ''
                 )
@@ -133,8 +140,8 @@ class Map extends Component {
                   ''
                 )
                 +
-                "<p class='attribute'>Data obtained from <a href='https://foursquare.com'>" +
-                "Foursquare</a></p>"
+                "<p class='attribute'>Data obtained from " +
+                "<a href='https://foursquare.com'>&copy;Foursquare</a></p>"
               ) 
             )
           )
