@@ -44,6 +44,8 @@ class App extends Component {
     // Network failed
     if (response === 'UNKNOWN_ERROR') {
       this.setState({isOnline: false, isLoadingStations: false, isLoadingInfo: false});
+    } else if (response === "OVER_QUERY_LIMIT") {
+      this.setState({isOnline: true, isLoadingStations: false, isLoadingInfo: false});
     }
     // Stations(places) retrieved successfully
     else {
