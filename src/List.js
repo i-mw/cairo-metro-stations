@@ -18,7 +18,11 @@ class List extends Component {
     if (highlighted) {
       let aboveElement = highlighted.getBoundingClientRect().top;
       if (aboveElement < 40 || aboveElement + 30 > window.innerHeight) {
-        highlighted.scrollIntoView(true);
+        highlighted.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest"
+        });
       }
     }
   }
