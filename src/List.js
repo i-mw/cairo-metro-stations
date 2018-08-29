@@ -44,7 +44,7 @@ class List extends Component {
         </form>
         { 
           isLoadingStations ? 
-            <img src="loading.gif" alt="loading" className="loading"/>
+            <img src="loading2.gif" alt="loading" className="loading"/>
             :
             !stations ?
               <p className="center">Couldn't retrieve stations!</p>

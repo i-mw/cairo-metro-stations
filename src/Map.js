@@ -231,7 +231,7 @@ class Map extends Component {
           isLoadingStations ?
             <p className="notify loading">
               <span>Loading Stations</span>
-              <img src="loading2.webp" alt="loading"/>
+              <img src="loading2.gif" alt="loading"/>
             </p>
             :
             (!stations) &&
