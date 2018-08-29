@@ -161,7 +161,6 @@ class Map extends Component {
     if (infoWindow.marker !== marker) {
       if(infoWindow.marker) {
         infoWindow.marker.setIcon(this.getIcon('default'));
-        this.getIcon();
       }
       infoWindow.marker = marker;
       infoWindow.open(map, marker);
@@ -178,6 +177,14 @@ class Map extends Component {
         this.setState({stations: this.props.stations});
       }
     }
+
+    // deactivate station when its not present in the current search query
+    if (this.props.activatedStationId) {
+      let marker = this.state.markers.find(marker => marker.id === this.props.activatedStationId);
+      if(!marker) {
+        this.props.activateStation('');
+      }
+    } 
   }
 
   render() {
@@ -189,12 +196,10 @@ class Map extends Component {
     } = this.props;
     const {map, infoWindow, markers} = this.state; 
 
-    if (this.state.markers.length !==0 ) {
-      if (activatedStationId) {
-        let marker = markers.find(marker => marker.id === activatedStationId);
-        if(marker) {
-          this.populateInfoWindow(infoWindow, map, marker, activatedStationInfo);
-        }
+    if (this.state.markers.length !==0 && activatedStationId) {
+      let marker = markers.find(marker => marker.id === activatedStationId);
+      if(marker) {
+        this.populateInfoWindow(infoWindow, map, marker, activatedStationInfo);
       }
     } 
 
