@@ -46,32 +46,48 @@ class App extends Component {
         this.setState({activatedStationId: targetStationId});
       } else {
 
-        this.setState({activatedStationId: targetStationId, isLoadingInfo: true});
-        let targetStation = (this.state.filteredStations || this.state.allStations).find(station => station.place_id === targetStationId);
+        this.setState({
+          activatedStationId: targetStationId,
+          isLoadingInfo: true});
+        let targetStation = (this.state.filteredStations || this.state.allStations)
+          .find(station => station.place_id === targetStationId);
 
         API.foursquare.getPlaceId(targetStation.geometry.location.toUrlValue())
           .then(data => {
             if(data.meta.code === 429) {
-              this.setState({activatedStationInfo: 'no-quota', isLoadingInfo: false, isOnline: true});
+              this.setState({
+                activatedStationInfo: 'no-quota',
+                isLoadingInfo: false,
+                isOnline: true});
             }
             else if(data.meta.code === 200 && !data.response.venues[0]) {
-              this.setState({activatedStationInfo: {tips: {items: []}, photos: {items: []}}, isLoadingInfo: false, isOnline: true})
+              this.setState({
+                activatedStationInfo: {tips: {items: []}, photos: {items: []}},
+                isLoadingInfo: false,
+                isOnline: true})
             } else {
 
               let placeId = data.response.venues[0].id;
               API.foursquare.getTips(placeId)
               .then(tipsData => {
                 if(tipsData.meta.code === 429) {
-                  this.setState({activatedStationInfo: 'no-quota', isLoadingInfo: false, isOnline: true});
+                  this.setState({
+                    activatedStationInfo: 'no-quota',
+                    isLoadingInfo: false,
+                    isOnline: true});
                 } else {
                   
                   API.foursquare.getPhotos(placeId)
                   .then(photosData => {
                     if(photosData.meta.code === 429) {
-                      this.setState({activatedStationInfo: 'no-quota', isLoadingInfo: false, isOnline: true});
+                      this.setState({
+                        activatedStationInfo: 'no-quota',
+                        isLoadingInfo: false,
+                        isOnline: true});
                     } else {
                       this.setState({
-                        activatedStationInfo: {tips: tipsData.response.tips, photos: photosData.response.photos},
+                        activatedStationInfo: {tips: tipsData.response.tips,
+                          photos: photosData.response.photos},
                         isLoadingInfo: false,
                         isOnline: true
                     });
