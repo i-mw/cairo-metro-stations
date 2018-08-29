@@ -55,7 +55,17 @@ class List extends Component {
                 <ul id="stations-list">
                   { 
                     stations.map(station => {
-                      return <li key={station.place_id} id={station.place_id} className={(station.place_id === activatedStationId) ? "highlight" : undefined} onClick={this.handleStationClick}>{station.name}</li>
+                      return (
+                      <li
+                        key={station.place_id}
+                        id={station.place_id}
+                        className={(station.place_id === activatedStationId) ? "highlight" : undefined}
+                        onClick={this.handleStationClick}
+                        tabIndex="0"
+                      >
+                        {station.name}
+                      </li>
+                    )
                     })
                   }
                 </ul>

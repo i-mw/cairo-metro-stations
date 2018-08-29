@@ -56,6 +56,10 @@ class Map extends Component {
       disableAutoPan: true
     });
 
+    // adjust map tab order
+    window.google.maps.event.addListener(map, "tilesloaded", this.adjustMapTabOrder);
+
+    // infowindow close listeners
     infoWindow.addListener('closeclick', _ => closeInfoWindow());
     window.google.maps.event.addListener(map, "click", _ => closeInfoWindow());
     document.getElementById('map').addEventListener('keydown', event => {
@@ -74,6 +78,14 @@ class Map extends Component {
     setIsLoadingStations(true);
     API.googleMaps.getStations(map, addStations);
     this.setState({map, infoWindow});
+  }
+
+  adjustMapTabOrder() {
+    document.querySelector("#map > div > div > div").setAttribute('tabindex', -1);
+    document.querySelector("#map iframe").setAttribute('tabindex', -1);
+    document.querySelectorAll('#map a').forEach(function(item) {
+      item.setAttribute('tabindex','-1'); 
+    });
   }
  
   drawMarkers() {
@@ -226,8 +238,10 @@ class Map extends Component {
       <main id="main" tabIndex="-1">
         <header>
           <h1>
-            <img id="hamburger-icon" src="menu.svg" alt="hamburger icon"/>
-            <span id="app-title">Cairo Metro Stations</span>
+            <img id="hamburger-icon" src="menu.svg"
+              alt="hamburger icon" tabIndex="0"
+            />
+            <span id="app-title" tabIndex="0">Cairo Metro Stations</span>
           </h1>
         </header>
         {
