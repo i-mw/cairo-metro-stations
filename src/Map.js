@@ -10,30 +10,6 @@ class Map extends Component {
     infoWindow: null,
   }
 
-  componentDidMount() {
-    if (window.google) {
-      this.initMap();
-    } else {
-      let script = document.body.querySelector('script');
-      script.addEventListener('load', e => {
-        this.initMap();
-      });
-      
-      window.setTimeout( _ => {
-        if (!window.google) {
-          this.props.setIsLoadingStations(false);
-          this.props.setIsOnline(false);
-        }
-      }, 1000);
-    }
-
-    // reset side menu on resizing window to prevent quirky behavior
-    window.addEventListener('resize', function(){
-      document.querySelector('aside').classList.remove('open');
-      document.querySelector('aside').classList.remove('close');
-    });
-  }
-
   initMap() {
     const {addStations, setIsLoadingStations} = this.props;
 
@@ -64,6 +40,13 @@ class Map extends Component {
     document.querySelectorAll('#map a').forEach(function(item) {
       item.setAttribute('tabindex','-1'); 
     });
+  }
+
+  getIcon(icon) {
+    return icon === 'activated' ?
+      'https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,000000,ffffff&color=ff000000?scale=1'
+    :
+      'https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,db4437,ffffff&color=ff000000?scale=1'
   }
  
   drawMarkers() {
@@ -119,14 +102,7 @@ class Map extends Component {
     this.setState({markers});
   }
 
-  getIcon(icon) {
-    return icon === 'activated' ?
-      'https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,000000,ffffff&color=ff000000?scale=1'
-    :
-      'https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline_v2-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/transit_pinlet-2-medium.png&highlight=ff000000,ffffff,db4437,ffffff&color=ff000000?scale=1'
-  }
-
-  populateInfoWindow(infoWindow, map, marker, info) {
+  populateInfoWindow(infoWindow, marker, info) {
     const {isLoadingInfo} = this.props;
 
     infoWindow.setContent(
@@ -166,16 +142,16 @@ class Map extends Component {
 
       + "</div>"
     );
+  }
 
-    if (infoWindow.marker !== marker) {
-      if(infoWindow.marker) {
-        infoWindow.marker.setIcon(this.getIcon('default'));
-      }
-      infoWindow.marker = marker;
-      infoWindow.open(map, marker);
-      infoWindow.marker.setIcon(this.getIcon('activated'));
-      map.panTo(infoWindow.marker.getPosition());
+  openInfoWindow(infoWindow, map, marker) {
+    if(infoWindow.marker) {
+      infoWindow.marker.setIcon(this.getIcon('default'));
     }
+    infoWindow.marker = marker;
+    infoWindow.open(map, marker);
+    infoWindow.marker.setIcon(this.getIcon('activated'));
+    map.panTo(infoWindow.marker.getPosition());
   }
 
   closeInfoWindow(infoWindow) {
@@ -187,23 +163,6 @@ class Map extends Component {
     infoWindow.marker = null;
   }
 
-  componentDidUpdate() {
-    if (this.state.map && !this.props.isLoadingStations && this.props.stations) {
-      if (this.props.stations !== this.state.stations) {
-        this.drawMarkers();
-        this.setState({stations: this.props.stations});
-      }
-    }
-
-    // deactivate station when its not present in the current search query
-    if (this.props.activatedStationId) {
-      let marker = this.state.markers.find(marker => marker.id === this.props.activatedStationId);
-      if(!marker) {
-        this.props.activateStation('');
-      }
-    } 
-  }
-
   handlehamburgerClick() {
       document.querySelector('aside').classList.toggle('open');
       document.querySelector('aside').classList.toggle('close');
@@ -211,6 +170,30 @@ class Map extends Component {
 
   handleAppTitleClick(props) {
       props.filterStations('');
+  }
+
+  componentDidMount() {
+    if (window.google) {
+      this.initMap();
+    } else {
+      let script = document.body.querySelector('script');
+      script.addEventListener('load', e => {
+        this.initMap();
+      });
+      
+      window.setTimeout( _ => {
+        if (!window.google) {
+          this.props.setIsLoadingStations(false);
+          this.props.setIsOnline(false);
+        }
+      }, 1000);
+    }
+
+    // reset side menu on resizing window to prevent quirky behavior
+    window.addEventListener('resize', function(){
+      document.querySelector('aside').classList.remove('open');
+      document.querySelector('aside').classList.remove('close');
+    });
   }
 
   render() {
@@ -225,7 +208,10 @@ class Map extends Component {
     if (this.state.markers.length !==0 && activatedStationId) {
       let marker = markers.find(marker => marker.id === activatedStationId);
       if(marker) {
-        this.populateInfoWindow(infoWindow, map, marker, activatedStationInfo);
+        this.populateInfoWindow(infoWindow, marker, activatedStationInfo);
+        if (infoWindow.marker !== marker) {
+          this.openInfoWindow(infoWindow, map, marker)
+        }
       }
     } 
 
@@ -264,6 +250,23 @@ class Map extends Component {
         </div>
       </main>
     )
+  }
+
+  componentDidUpdate() {
+    if (this.state.map && !this.props.isLoadingStations && this.props.stations) {
+      if (this.props.stations !== this.state.stations) {
+        this.drawMarkers();
+        this.setState({stations: this.props.stations});
+      }
+    }
+
+    // deactivate station when its not present in the current search query
+    if (this.props.activatedStationId) {
+      let marker = this.state.markers.find(marker => marker.id === this.props.activatedStationId);
+      if(!marker) {
+        this.props.activateStation('');
+      }
+    } 
   }
 }
 
