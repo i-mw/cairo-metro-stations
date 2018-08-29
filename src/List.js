@@ -32,8 +32,14 @@ class List extends Component {
     return (
       <aside>
         <form>
-          <input id="filter-input" type="text" placeholder="Search for a place" autoComplete="off"
-            defaultValue={searchTerm} onKeyDown={event => {event.keyCode === 13 && this.handleFilterSubmit(event)}}/>
+          <input
+            id="filter-input"type="text"
+            placeholder={isLoadingStations? "loading..." : "Search for a place"}
+            autoComplete="off"
+            value={searchTerm}
+            onChange={this.handleFilterSubmit}
+            onKeyDown={event => { (event.keyCode === 13) && this.handleFilterSubmit(event) }}
+          />
           <input id="filter-button" type="button" value="Filter" onClick={this.handleFilterSubmit}/>
         </form>
         { 

@@ -144,6 +144,7 @@ class App extends Component {
           isLoadingStations={isLoadingStations}
           isLoadingInfo={isLoadingInfo}
           activateStation={this.activateStation}
+          filterStations={this.filterStations}          
           addStations={this.addStations}
           setIsLoadingStations={this.setIsLoadingStations}
           setIsOnline={this.setIsOnline}

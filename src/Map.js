@@ -37,6 +37,11 @@ class Map extends Component {
       document.querySelector('aside').classList.remove('open');
       document.querySelector('aside').classList.remove('close');
     });
+
+    let appTitle = document.getElementById('app-title');
+    appTitle.addEventListener('click', _ => {
+      this.props.filterStations('');
+    })
   }
 
   initMap() {
@@ -219,7 +224,7 @@ class Map extends Component {
         <header>
           <h1>
             <img id="hamburger-icon" src="menu.svg" alt="hamburger icon"/>
-            <span>Cairo Metro Stations</span>
+            <span id="app-title">Cairo Metro Stations</span>
           </h1>
         </header>
         {
@@ -248,6 +253,7 @@ Map.propTypes = {
   isLoadingStations: propTypes.bool.isRequired,
   isLoadingInfo: propTypes.bool.isRequired,
   activateStation: propTypes.func.isRequired,
+  filterStations: propTypes.func.isRequired,
   addStations: propTypes.func.isRequired,
   setIsLoadingStations: propTypes.func.isRequired,
   setIsOnline: propTypes.func.isRequired
