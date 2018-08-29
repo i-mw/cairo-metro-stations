@@ -243,7 +243,7 @@ class App extends Component {
 
         { // User is offline, notify him/er
           (!isOnline) && 
-            (<p className="network-error">Network error! Check your connection.</p>)
+            (<p role="alert" className="network-error">Network error! Check your connection.</p>)
         }
       </div>
     );

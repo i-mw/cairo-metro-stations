@@ -57,12 +57,12 @@ class List extends Component {
             // No stations were initially retrieved from server
             // stations = null in this case
             !stations ?
-              <p className="center">Couldn't retrieve stations!</p>
+              <p role="status" className="center">Couldn't retrieve stations!</p>
               :
               // No matching stations
               // stations = [] in this case
               stations.length === 0 ?
-                <p className="center">No matching stations!</p>
+                <p role="status" className="center">No matching stations!</p>
                 :
                 <ul id="stations-list" aria-label="matched stations">
                   { 

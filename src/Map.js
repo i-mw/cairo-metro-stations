@@ -167,7 +167,7 @@ class Map extends Component {
         "<h3>" + marker.title + "</h3>" +
         // Show loading icon if still loading
         (isLoadingInfo ?
-          '<div role="img" aria-label="loading" ' +
+          '<div role="status" aria-label="loading" ' +
           'style="background: url(' + loadingIconCircle + '); ' +
           'background-size: 20px 20px; ' +
           'width: 20px; height: 20px;margin-right: auto; ' +
@@ -175,16 +175,16 @@ class Map extends Component {
         :
           // Foursquare quota exceeded
           (info === 'no-quota' ?
-            "<p class='center'>Server overloaded. Try later!</p>"
+            "<p role='status' class='center'>Server overloaded. Try later!</p>"
           :
             // Mostly network error
             (!info.tips && !info.photos ?
-              "<p class='center'>Couldn't retrieve data!</p>"
+              "<p role='status' class='center'>Couldn't retrieve data!</p>"
             :
               // No data available about this station
               // Or station not found on Foursquare
               (!info.photos.items[0] && !info.tips.items[0] ?
-                "<p class='center'>No data available about this station!</p>"
+                "<p role='status' class='center'>No data available about this station!</p>"
               :
                 (info.photos.items[0] ?
                   '<div  role="img" aria-label="'+ marker.title +
@@ -345,18 +345,18 @@ class Map extends Component {
         {
           // loading stations
           isLoadingStations ?
-            <p className="notify loading" aria-label="loading stations">
+            <p className="notify loading" role="status" aria-label="loading stations">
               <span aria-hidden="true">Loading Stations</span>
               <img src={loadingIconStripes} alt="loading" aria-hidden="true"/>
             </p>
             :
             // Failed loading stations
             (!stations) &&
-              <p className="notify">Couldn't retrieve stations!</p>
+              <p role="status" className="notify">Couldn't retrieve stations!</p>
         }
 
         <div
-          id="map" role="application"
+          id="map" role="application" aria-label="google maps"
           onKeyDown={event => { (event.keyCode === 27) && this.closeInfoWindow(this.state.infoWindow) }}
         >
         </div>
