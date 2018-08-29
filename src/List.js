@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import propTypes from 'prop-types'
+import loadingIconStripes from './assets/loading2.gif'
 
 class List extends Component {
 
@@ -34,7 +35,7 @@ class List extends Component {
         </form>
         { 
           isLoadingStations ? 
-            <img src="loading2.gif" alt="loading" className="loading"/>
+            <img src={loadingIconStripes} alt="loading" className="loading"/>
             :
             !stations ?
               <p className="center">Couldn't retrieve stations!</p>

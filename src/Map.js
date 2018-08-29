@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
 import propTypes from 'prop-types'
 import * as API from './API.js'
+import hamburgerIcon from './assets/menu.svg'
+import loadingIconCircle from './assets/loading.gif'
+import loadingIconStripes from './assets/loading2.gif'
 
 class Map extends Component {
   state = {
@@ -110,7 +113,7 @@ class Map extends Component {
         "<h3>" + marker.title + "</h3>" +
         (isLoadingInfo ?
           '<div role="img" aria-label="loading" ' +
-          'style="background: url(loading.gif); ' +
+          'style="background: url(' + loadingIconCircle + '); ' +
           'background-size: 20px 20px; ' +
           'width: 20px; height: 20px;margin-right: auto; ' +
           'margin-left: auto;" ></div>'
@@ -226,7 +229,7 @@ class Map extends Component {
       <main id="main" tabIndex="-1">
         <header role="banner">
           <h1 aria-labelledby="app-title">
-            <img id="hamburger-icon" src="menu.svg"
+            <img id="hamburger-icon" src={hamburgerIcon}
               alt="hamburger icon" aria-label="toggle side menu" tabIndex="0"
               onClick={this.handlehamburgerClick}
               onKeyDown={event => { (event.keyCode === 13) && this.handlehamburgerClick(event) }}
@@ -243,7 +246,7 @@ class Map extends Component {
           isLoadingStations ?
             <p className="notify loading" aria-label="loading stations">
               <span aria-hidden="true">Loading Stations</span>
-              <img src="loading2.gif" alt="loading" aria-hidden="true"/>
+              <img src={loadingIconStripes} alt="loading" aria-hidden="true"/>
             </p>
             :
             (!stations) &&
