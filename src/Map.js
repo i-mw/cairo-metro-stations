@@ -27,21 +27,11 @@ class Map extends Component {
       }, 1000);
     }
 
-    let hamburger = document.getElementById('hamburger-icon');
-    hamburger.addEventListener('click', function() {
-      document.querySelector('aside').classList.toggle('open');
-      document.querySelector('aside').classList.toggle('close');
-    });
-
+    // reset side menu on resizing window to prevent quirky behavior
     window.addEventListener('resize', function(){
       document.querySelector('aside').classList.remove('open');
       document.querySelector('aside').classList.remove('close');
     });
-
-    let appTitle = document.getElementById('app-title');
-    appTitle.addEventListener('click', _ => {
-      this.props.filterStations('');
-    })
   }
 
   initMap() {
@@ -59,21 +49,9 @@ class Map extends Component {
     // adjust map tab order
     window.google.maps.event.addListener(map, "tilesloaded", this.adjustMapTabOrder);
 
-    // infowindow close listeners
-    infoWindow.addListener('closeclick', _ => closeInfoWindow());
-    window.google.maps.event.addListener(map, "click", _ => closeInfoWindow());
-    document.getElementById('map').addEventListener('keydown', event => {
-      if(event.keyCode === 27) {closeInfoWindow()}
-    });
-
-    let closeInfoWindow = _ => {
-      if(infoWindow.marker) {
-        infoWindow.marker.setIcon(this.getIcon('default'));
-      }
-      infoWindow.close();
-      this.props.activateStation('');
-      infoWindow.marker = null;
-    }
+    // infowindow close listeners + there's extra listener on #map element in render's return
+    infoWindow.addListener('closeclick', _ => this.closeInfoWindow(infoWindow));
+    window.google.maps.event.addListener(map, "click", _ => this.closeInfoWindow(infoWindow));
 
     setIsLoadingStations(true);
     API.googleMaps.getStations(map, addStations);
@@ -200,6 +178,14 @@ class Map extends Component {
     }
   }
 
+  closeInfoWindow(infoWindow) {
+    if(infoWindow.marker) {
+      infoWindow.marker.setIcon(this.getIcon('default'));
+    }
+    infoWindow.close();
+    this.props.activateStation('');
+    infoWindow.marker = null;
+  }
 
   componentDidUpdate() {
     if (this.state.map && !this.props.isLoadingStations && this.props.stations) {
@@ -216,6 +202,15 @@ class Map extends Component {
         this.props.activateStation('');
       }
     } 
+  }
+
+  handlehamburgerClick() {
+      document.querySelector('aside').classList.toggle('open');
+      document.querySelector('aside').classList.toggle('close');
+  }
+
+  handleAppTitleClick(props) {
+      props.filterStations('');
   }
 
   render() {
@@ -240,8 +235,15 @@ class Map extends Component {
           <h1>
             <img id="hamburger-icon" src="menu.svg"
               alt="hamburger icon" tabIndex="0"
+              onClick={this.handlehamburgerClick}
+              onKeyDown={event => { (event.keyCode === 13) && this.handlehamburgerClick(event) }}
             />
-            <span id="app-title" tabIndex="0">Cairo Metro Stations</span>
+            <span
+              id="app-title" tabIndex="0"
+              onClick={_ => {this.handleAppTitleClick(this.props)}}
+              onKeyDown={event => { (event.keyCode === 13) && this.handleAppTitleClick(this.props) }}              
+            >Cairo Metro Stations
+            </span>
           </h1>
         </header>
         {
@@ -254,7 +256,12 @@ class Map extends Component {
             (!stations) &&
               <p className="notify">Couldn't retrieve stations!</p>
         }
-        <div id="map"></div>
+
+        <div
+          id="map"
+          onKeyDown={event => { (event.keyCode === 27) && this.closeInfoWindow(this.state.infoWindow) }}
+        >
+        </div>
       </main>
     )
   }

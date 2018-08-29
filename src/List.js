@@ -40,7 +40,11 @@ class List extends Component {
             onChange={this.handleFilterSubmit}
             onKeyDown={event => { (event.keyCode === 13) && this.handleFilterSubmit(event) }}
           />
-          <input id="filter-button" type="button" value="Filter" onClick={this.handleFilterSubmit}/>
+          <input
+            id="filter-button" type="button" value="Filter"
+            onClick={this.handleFilterSubmit}
+            onKeyDown={event => { (event.keyCode === 13) && this.handleFilterSubmit(event) }}
+          />
         </form>
         { 
           isLoadingStations ? 
@@ -59,9 +63,10 @@ class List extends Component {
                       <li
                         key={station.place_id}
                         id={station.place_id}
+                        tabIndex="0"
                         className={(station.place_id === activatedStationId) ? "highlight" : undefined}
                         onClick={this.handleStationClick}
-                        tabIndex="0"
+                        onKeyDown={event => { (event.keyCode === 13) && this.handleStationClick(event) }}
                       >
                         {station.name}
                       </li>
