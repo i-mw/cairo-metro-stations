@@ -223,7 +223,7 @@ class Map extends Component {
     } 
 
     return(
-      <main>
+      <main id="main" tabIndex="-1">
         <header>
           <h1>
             <img id="hamburger-icon" src="menu.svg" alt="hamburger icon"/>

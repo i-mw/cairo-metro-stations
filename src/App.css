@@ -18,6 +18,7 @@ body,
   display: flex;
   flex-flow: row nowrap;
   font-family: sans-serif;
+  position: relative;
 }
 
 .center {
@@ -35,6 +36,21 @@ body,
   text-align: center;
   color: white;
   background-color: #d45c51;
+}
+
+/* skip link */
+
+.skip-link {
+  position: absolute;
+  top: -28px;
+  left: 0;
+  padding: 5px;
+  color: white;
+  background-color: black;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 

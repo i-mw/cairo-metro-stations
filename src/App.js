@@ -114,6 +114,10 @@ class App extends Component {
     this.setState({isOnline});
   }
 
+  handleSkipLink() {
+    document.getElementById('main').focus();
+  }
+
   render() {
     const {
       allStations,
@@ -128,6 +132,11 @@ class App extends Component {
 
     return (
       <div className="container">
+        <div tabIndex="0" className="skip-link"
+          onClick={this.handleSkipLink}
+          onKeyDown={event => { (event.keyCode === 13) && this.handleSkipLink(event) }}          
+          >Skip to main content</div>
+          
         <List
           stations={filteredStations || allStations}
           activatedStationId={activatedStationId}
