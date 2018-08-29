@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
-import propTypes from 'prop-types'
-import * as API from './API.js'
-import hamburgerIcon from './assets/menu.svg'
-import loadingIconCircle from './assets/loading.gif'
-import loadingIconStripes from './assets/loading2.gif'
+import React, {Component} from 'react';
+import propTypes from 'prop-types';
+import * as API from './API.js';
+import hamburgerIcon from './assets/menu.svg';
+import loadingIconCircle from './assets/loading.gif';
+import loadingIconStripes from './assets/loading2.gif';
 
 class Map extends Component {
   state = {
@@ -294,6 +294,6 @@ Map.propTypes = {
   addStations: propTypes.func.isRequired,
   setIsLoadingStations: propTypes.func.isRequired,
   setIsOnline: propTypes.func.isRequired
-}
+};
 
-export default Map
+export default Map;

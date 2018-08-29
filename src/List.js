@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
-import propTypes from 'prop-types'
-import loadingIconStripes from './assets/loading2.gif'
+import React, {Component} from 'react';
+import propTypes from 'prop-types';
+import loadingIconStripes from './assets/loading2.gif';
 
 class List extends Component {
 
@@ -88,6 +88,6 @@ List.propTypes = {
   isLoadingStations: propTypes.bool.isRequired,
   filterStations: propTypes.func.isRequired,
   activateStation: propTypes.func.isRequired
-}
+};
 
-export default List
+export default List;
