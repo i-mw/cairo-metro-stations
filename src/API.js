@@ -1,44 +1,21 @@
+/**
+ * This file contains all AJAX request that are made to outside servers
+ * These are for two destination: Google maps and Foursquare
+ * 
+ * Requests to Google Maps: to obtain metro stations present in cairo 
+ *  - which are 59 stations at the current moment in 2018
+ * 
+ * Requests to Foursquare: to obtain data (one tip and one photo)
+ * about each station when requested
+ */
+
+ /* Foursquare Requests */
 export const foursquare = {
-  // keys: {
-  //   clientId: '05P0FS504FLZ5TKRIHPZBKZVUFCGIDXD55THE5H0K1YJDJGJ',
-  //   clientSecret: 'OZQE3XKXXVPNIRCCXMD0WTENRO314GO4S4BZCL4LS1HVM1JH'
-  // },
-
-  // keys: {
-  //   clientId: 'H3YM4S4DOJOSIKRGQIXRH15LJ3Y4YHHESRRZIDD2TXUMLA1F',
-  //   clientSecret: 'Q1GRWZKDTXRPP3NLHOP2M4RTL1ZTBA1NAT5EJ2OED2PEQYRE'
-  // },
-
-  // keys: {
-  //   clientId: 'SQ4DUW3REDAGG21W324DIDXBKAAHSWKJL0YZFUWAJBT3YAAK',
-  //   clientSecret: 'ZITLVK0JJMDX2OBGXQV33HML13UZS2GOVF3ZN4AXEBSWUKAS'
-  // },
-
-  // keys: {
-  //   clientId: 'JQV2OUETLB4YFDADMAXAQT1FLAEGDGTO3IAEPV1REZFDC1PH',
-  //   clientSecret: 'UQ3YCGJJZHYNERXXUNDNNS4JBGEST4M1QGSVUQSB5HD2ZVQ5'
-  // },
-
-  // keys: {
-  //   clientId: 'DHL4OUMEKM2N1IELF4I30I4Y2ZBUWD0LEV04DS5HLWVZAZHQ',
-  //   clientSecret: 'YFNHQ4G3FNBDOYDZOP4NFLOJFDIRUMIFH3OGMYI33ZF3RGRA'
-  // },
-
-  // keys: {
-  //   clientId: 'F3QZA5P41P43VTBB5FU51VRTLX35OTAQ5UVBS4K2MU3NEPHW',
-  //   clientSecret: 'NK2530GRTGXS4CHVZM1ECQCOHOOXPOQSWQNEGDC13CXU1G2L'
-  // },
-
-  // keys: {
-  //   clientId: '4CMBOEV0AOUBYEKTJBDJGXUGZYKCN5HX1HCD0GQSNGNSWA3F',
-  //   clientSecret: '4ENM5TMBGSTNYCZS0EO4NTLH4O5LKAXT400ZNNVP1SLCHUP0'
-  // },
-
   keys: {
-    clientId: 'PZC3JKPZDLJRYAK0RG5QQQF4SB52GGXQN0NJUBOJDLCXOHDJ',
-    clientSecret: 'BQW0HLVICM4NZG1W33SSNDJUH05NJYV45Y22PPRTTMGJCRT0'
+    clientId: '05P0FS504FLZ5TKRIHPZBKZVUFCGIDXD55THE5H0K1YJDJGJ',
+    clientSecret: 'OZQE3XKXXVPNIRCCXMD0WTENRO314GO4S4BZCL4LS1HVM1JH'
   },
-  
+
   getPlaceId(location) {
     return fetch('https://api.foursquare.com/v2/venues/search?' +
             'client_id=' + this.keys.clientId + '&' +
@@ -74,6 +51,7 @@ export const foursquare = {
   }
 }
 
+/* Google Requests */
 export const googleMaps = {  
   getStations(map, cb) {
     let google = window.google,

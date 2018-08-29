@@ -2,18 +2,34 @@ import React, {Component} from 'react';
 import propTypes from 'prop-types';
 import loadingIconStripes from './assets/loading2.gif';
 
+/**
+ * @constructor
+ * @description List component representing the side list view
+ * execution series: render() -> componentDidUpdate()
+ */
 class List extends Component {
 
+  /**
+   * @description Handle clicking filter, pressing enter or typing in input field
+   */
   handleFilterSubmit = event => {
     event.preventDefault();
     let searchTerm = document.getElementById('filter-input').value;
     this.props.filterStations(searchTerm);
   }
 
+  /**
+   * @description Handle clicking a station in the side list view,
+   * This activates the station
+   */
   handleStationClick= event => {
     this.props.activateStation(event.target.getAttribute('id'));
   }
 
+  /**
+   * @description Draws UI
+   * render called then componentDidUpdate
+   */
   render() {
     const {stations, activatedStationId, searchTerm, isLoadingStations} = this.props;
     return (
@@ -34,12 +50,17 @@ class List extends Component {
           />
         </form>
         { 
+          // Waiting for stations/places to arrive from google maps
           isLoadingStations ? 
             <img src={loadingIconStripes} alt="loading" className="loading"/>
             :
+            // No stations were initially retrieved from server
+            // stations = null in this case
             !stations ?
               <p className="center">Couldn't retrieve stations!</p>
               :
+              // No matching stations
+              // stations = [] in this case
               stations.length === 0 ?
                 <p className="center">No matching stations!</p>
                 :
@@ -66,8 +87,14 @@ class List extends Component {
     )
   }
 
+  /**
+   * @description Part of react life cycle, executed after render()
+   * specifically were added here to prevent setting state inside render()
+   */
   componentDidUpdate() {
+    // Get highlight li in the side menu ul
     let highlighted = document.querySelector('.highlight');
+    // If out of viewport, scroll side menu to show it
     if (highlighted) {
       let aboveElement = highlighted.getBoundingClientRect().top;
       if (aboveElement < 40 || aboveElement + 30 > window.innerHeight) {
