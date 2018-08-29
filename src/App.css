@@ -96,7 +96,6 @@ main header h1 img#hamburger-icon {
   float: left;
   cursor: pointer;
   vertical-align: baseline;
-  margin-top: 5px;
 }
 
 main header h1 span {
@@ -114,7 +113,7 @@ main header h1 span {
 
 main #map {
   width: 100%;
-  height: calc(100% - 53px);
+  height: calc(100% - 48px);
 }
 
 /* map overlays */
